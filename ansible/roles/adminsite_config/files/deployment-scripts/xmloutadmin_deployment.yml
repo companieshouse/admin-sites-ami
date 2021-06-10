@@ -9,15 +9,14 @@
       application_name: "xmlout-admin"
       home_dir: "/home/xmloutadm"
       directories:
-        - "DATA" 
         - "MODULES"
         - "htdocs"
       config_files:
-        - "EWF"
+        - "BEP"
+        - "CHADMIN"
         - "CHD"
         - "COM"
-        - "CHADMIN"
-        - "BEP"
+        - "EWF"
     roles:
       - { role: /root/roles/nfs_mounts }
       - name: ch_collections.base.cloudwatch_agent_config

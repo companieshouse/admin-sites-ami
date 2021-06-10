@@ -9,13 +9,12 @@
       application_name: "xml-admin"
       home_dir: "/home/xmladm"
       directories:
-        - "DATA" 
         - "MODULES"
         - "htdocs"
       config_files:
-        - "EWF"
+        - "CE"
         - "CHD"
-        - "CEC"
+        - "EWF"
     roles:
       - { role: /root/roles/nfs_mounts }
       - name: ch_collections.base.cloudwatch_agent_config

@@ -33,7 +33,7 @@
      name: libapreq2
      state: present
 
-- name: Copy httpd config templates to relevant locations
+- name: Copy all config files/templates to relevant locations
   vars:
     ansible_python_interpreter: /usr/bin/python2.6
   copy:
@@ -41,21 +41,15 @@
     dest: "/{{ item }}"
     mode: 0755
   loop:
-    - etc/httpd/conf/httpd.conf.ewfadmin.j2
-    - etc/httpd/conf/httpd.conf.xmladmin.j2
-    - etc/httpd/conf/httpd.conf.xmloutadmin.j2
-    
-- name: Copy httpd config templates to relevant locations
-  vars:
-    ansible_python_interpreter: /usr/bin/python2.6
-  copy:
-    src: "{{ item }}"
-    dest: "/{{ item }}"
-    mode: 0755
-  loop:
-    - etc/httpd/conf/httpd.conf.ewfadmin.j2
-    - etc/httpd/conf/httpd.conf.xmladmin.j2
-    - etc/httpd/conf/httpd.conf.xmloutadmin.j2
+    - etc/httpd/conf/ewfadmin.httpd.conf.j2
+    - etc/httpd/conf/ewfadmin_startup.pl
+    - etc/httpd/conf.d/ewfadmin_perl.conf
+    - etc/httpd/conf/xmladmin.httpd.conf.j2
+    - etc/httpd/conf/xmladmin_startup.pl
+    - etc/httpd/conf.d/xmladmin_perl.conf
+    - etc/httpd/conf/xmloutadmin.httpd.conf.j2
+    - etc/httpd/conf/xmloutadmin_startup.pl
+    - etc/httpd/conf.d/xmloutadmin_perl.conf
     
 - name: Create falsemnt directory in users home directories
   file:

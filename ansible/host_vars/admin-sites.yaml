@@ -42,6 +42,7 @@ postfix_net_config:
 
 ## Nagios Variables
 auto_register_client: true
+auto_deregister_client: true
 nagios_host: nagios.sharedservices.aws.internal
 server_template_name: "AdminSites_Server"
 nrpe_allowed_hosts:
