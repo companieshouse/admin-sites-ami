@@ -1,0 +1,34 @@
+---
+- name: Deploy Centos6.10 Container
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+      - name: admin-sites
+        image: "geerlingguy/docker-centos6-ansible"
+        # The network setting allows for idempotent testing.
+        # without it the role creates a brand new container, with it the container is re-used.
+        network_mode: bridge
+        provision_docker_volumes: 
+          - /lib/modules:/lib/modules
+  roles:
+    - role: provision_docker
+      provision_docker_inventory: "{{ inventory }}"
+      provision_docker_privileged: True
+
+# Setup container to match the base AMI in terms of packages and configuration so its a true test
+- hosts: admin-sites
+  become: true
+  roles:
+    - ch_collections.enterpriselinux6.centos6_base_repo
+    - epel
+    - role: ch_collections.base.os_package_control
+      vars:
+        additional_packages:
+          - libselinux-python
+          - libsemanage-python
+          - selinux-policy
+    - ch_collections.base.compile_python_source
+
+- import_playbook: ../playbook.yml
+

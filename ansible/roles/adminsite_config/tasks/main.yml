@@ -1,0 +1,118 @@
+---
+- name: Download app library archive from s3
+  aws_s3:
+    bucket: '{{ s3_bucket }}'
+    object: '{{ s3_file_perl_lib }}'
+    dest: "/tmp/{{ s3_file_perl_lib_name }}"
+    mode: get
+
+- name: Unarchive app library download
+  unarchive:
+    src: "/tmp/{{ s3_file_perl_lib_name }}"
+    dest: /tmp/
+    remote_src: yes
+
+- name: Apply mod_cookietrack.so http module
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.6
+  copy:
+    src: /tmp/etc/httpd/modules/mod_cookietrack.so
+    dest: /etc/httpd/modules/mod_cookietrack.so
+    mode: 0755
+    remote_src: yes
+ 
+- name: Remove mod_cookietrack.so installation file
+  file:
+    path: /tmp/etc
+    state: absent
+
+- name: Install libapreq2 package for httpd mod_apreq2.so module requirement
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.6
+  yum:
+     name: libapreq2
+     state: present
+
+- name: Copy all config files/templates to relevant locations
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.6
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ item }}"
+    mode: 0755
+  loop:
+    - etc/httpd/conf/ewfadmin.httpd.conf.j2
+    - etc/httpd/conf/ewfadmin_startup.pl
+    - etc/httpd/conf.d/ewfadmin_perl.conf
+    - etc/httpd/conf/xmladmin.httpd.conf.j2
+    - etc/httpd/conf/xmladmin_startup.pl
+    - etc/httpd/conf.d/xmladmin_perl.conf
+    - etc/httpd/conf/xmloutadmin.httpd.conf.j2
+    - etc/httpd/conf/xmloutadmin_startup.pl
+    - etc/httpd/conf.d/xmloutadmin_perl.conf
+    
+- name: Create falsemnt directory in users home directories
+  file:
+    path: "{{ item.home }}/falsemnt"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: '755' 
+  loop: "{{ userdetails }}" 
+    
+- name: Update Postfix configuration for mail relay (existing commented lines)
+  lineinfile:
+    dest: "/etc/postfix/{{ postfix_main_config_file }}"
+    line: "{{ item.key }} = {{ item.value }}"
+    regexp: "^#{{ item.key }} ="
+    insertafter: "^#{{ item.key }} ="
+  with_items: "{{ postfix_config }}"
+
+- name: Update Postfix network config (existing uncommented lines)
+  lineinfile:
+    dest: "/etc/postfix/{{ postfix_main_config_file }}"
+    line: "{{ item.key }} = {{ item.value }}"
+    regexp: "^{{ item.key }} ="
+  with_items: "{{ postfix_net_config }}"
+
+- name: Enable crontab for users
+  lineinfile:
+    dest: "/etc/cron.allow"
+    line: "{{ item.name }}"
+    regexp: "^{{ item.name }}"
+  loop: "{{ userdetails }}" 
+
+- name: Allow users to use apachectl 
+  copy:
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    content: |
+      # {{ item.name }} user
+      {{ item.name }} ALL=(ALL) NOPASSWD:/usr/sbin/apachectl
+  loop: "{{ userdetails }}" 
+
+- name: Copy deployment scripts to server for later use
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.6
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_deploy_playbook_directory }}/{{ item | basename }}"
+    mode: 0755
+  loop:
+    - deployment-scripts/ewfadmin_deployment.yml
+    - deployment-scripts/xmladmin_deployment.yml
+    - deployment-scripts/xmloutadmin_deployment.yml
+
+- name: Setup deployment playbook dependancies (1/2)
+  vars:
+    ansible_python_interpreter: /usr/bin/python2.6  
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_deploy_playbook_directory }}/"
+    mode: 0755
+  loop: 
+    - requirements.yml
+
+- name: Setup deployment playbook dependancies (2/2)
+  command: "/usr/local/bin/ansible-galaxy install -f -r {{ansible_deploy_playbook_directory}}/requirements.yml"
+  register: requirements_output
+  changed_when: '"was installed successfully" in requirements_output.stdout'
