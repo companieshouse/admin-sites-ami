@@ -89,8 +89,8 @@
           mode: '0644'
         loop:
           - /etc/httpd/conf/httpd.conf
-          - /etc/httpd/conf/ewf_startup.pl
-          - /etc/httpd/conf.d/ewf_perl.conf
+          - /etc/httpd/conf/xmladmin_startup.pl
+          - /etc/httpd/conf.d/xmladmin_perl.conf
 
       - name: Make sure Apache is started
         service:
