@@ -94,6 +94,14 @@
           - /etc/httpd/conf/xmloutadmin_startup.pl
           - /etc/httpd/conf.d/xmloutadmin_perl.conf
 
+      - name: Symlinking "My::" to modules
+        ansible.builtin.file:
+          src: "{{ home_dir }}/config/My"
+          path: "{{ home_dir }}/MODULES/My"
+          owner: "{{ home_dir | basename }}"
+          group: chlservices
+          state: link
+
       - name: Make sure Apache is started
         service:
           name: "httpd"
