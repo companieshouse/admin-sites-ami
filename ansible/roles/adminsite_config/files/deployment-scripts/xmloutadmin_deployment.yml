@@ -1,5 +1,5 @@
 ---
-  - name: Deploy EWF Admin site
+  - name: Deploy XMLOut Admin site
     hosts: localhost
     gather_facts: true
     collections: 
