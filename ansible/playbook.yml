@@ -15,16 +15,16 @@
       tags: ewfadmin
       vars:
         users: "{{ userdetails | selectattr('name', 'match', 'ewfadm') | list }}"
-        user_home_path: "{{ userdetails | selectattr('name', 'match', 'ewfadm') | map(attribute='home') | first }}"
+        app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'ewfadm') | map(attribute='home') | first }}"
     - role: ch_collections.heritage_services.heritage_frontend_base
       tags: xmladmin
       vars:
         users: "{{ userdetails | selectattr('name', 'match', 'xmladm') | list }}"
-        user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmladm') | map(attribute='home') | first }}"
+        app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmladm') | map(attribute='home') | first }}"
     - role: ch_collections.heritage_services.heritage_frontend_base
       tags: xmloutadmin
       vars:
         users: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | list }}"
-        user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | map(attribute='home') | first }}"
+        app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | map(attribute='home') | first }}"
     - ch_collections.heritage_services.nfs
     - adminsite_config
