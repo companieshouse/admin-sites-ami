@@ -26,5 +26,5 @@
       vars:
         users: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | list }}"
         app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | map(attribute='home') | first }}"
-    - ch_collections.heritage_services.nfs
+    - ch_collections.enterpriselinux6.nfs
     - adminsite_config
