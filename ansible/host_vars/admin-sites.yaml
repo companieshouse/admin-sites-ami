@@ -12,6 +12,10 @@ userdetails:
     group: chlservices
     gid: 600
     home: /home/xmloutadm
+  - name: chdadm
+    group: chlservices
+    gid: 600
+    home: /home/chdadm
 
 selinux_status:
   - policy: targeted

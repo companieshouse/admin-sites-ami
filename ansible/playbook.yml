@@ -26,5 +26,10 @@
       vars:
         users: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | list }}"
         app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'xmloutadm') | map(attribute='home') | first }}"
+    - role: ch_collections.heritage_services.heritage_frontend_base
+      tags: chdadmin
+      vars:
+        users: "{{ userdetails | selectattr('name', 'match', 'chdadm') | list }}"
+        app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'chdadm') | map(attribute='home') | first }}"
     - ch_collections.enterpriselinux6.nfs
     - adminsite_config
