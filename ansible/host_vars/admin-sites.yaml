@@ -86,3 +86,4 @@ nrpe_command:
   check_users:
     script: check_users
     option: $ARG1$
+  

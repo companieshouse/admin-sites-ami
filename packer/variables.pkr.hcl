@@ -113,3 +113,15 @@ variable "nagios_api_key" {
   default     = ""
   description = "This key will be supplied to the Nagios agent Ansible role to populate jinja templates"
 }
+
+variable "force_delete_snapshot" {
+  default     = false
+  description = "Delete snapshots associated with AMIs, which have been deregistered by force_deregister"
+  type        = bool
+}
+
+variable "force_deregister" {
+  default     = false
+  description = "Deregister an existing AMI if one with the same name already exists"
+  type        = bool
+}
