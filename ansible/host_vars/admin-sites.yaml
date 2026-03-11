@@ -33,15 +33,15 @@ postfix_main_config_file: main.cf
 postfix_config:
   - key: mydomain
     value: companieshouse.gov.uk
-  - key: myorigin 
+  - key: myorigin
     value: $mydomain
   - key: relayhost
     value: smtp-outbound.sharedservices.aws.internal
 
 postfix_net_config:
-  - key: inet_interfaces 
+  - key: inet_interfaces
     value: all
-  - key: inet_protocols 
+  - key: inet_protocols
     value: ipv4
 
 ## Nagios Variables
@@ -58,7 +58,7 @@ nrpe_plugin_packages:
   - nagios-plugins-nrpe
   - nagios-plugins
   - nagios-plugins-disk
-nrpe_config: 
+nrpe_config:
   dont_blame_nrpe: 1
 nrpe_command:
   check_disk:
@@ -86,4 +86,3 @@ nrpe_command:
   check_users:
     script: check_users
     option: $ARG1$
-  
