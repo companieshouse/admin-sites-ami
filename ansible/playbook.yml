@@ -33,3 +33,9 @@
         app_user_home_path: "{{ userdetails | selectattr('name', 'match', 'chdadm') | map(attribute='home') | first }}"
     - ch_collections.enterpriselinux6.nfs
     - adminsite_config
+
+- hosts: admin-sites
+  become: true
+  gather_facts: yes
+  roles:
+    - companieshouse.security.clamav_ng
