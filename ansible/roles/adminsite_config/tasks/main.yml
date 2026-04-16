@@ -50,6 +50,9 @@
     - etc/httpd/conf/xmloutadmin.httpd.conf.j2
     - etc/httpd/conf/xmloutadmin_startup.pl
     - etc/httpd/conf.d/xmloutadmin_perl.conf
+    - etc/httpd/conf/chdadmin.httpd.conf.j2
+    - etc/httpd/conf/chdadmin_startup.pl
+    - etc/httpd/conf.d/chdadmin_perl.conf
     
 - name: Create falsemnt directory in users home directories
   file:
@@ -101,6 +104,7 @@
     - deployment-scripts/ewfadmin_deployment.yml
     - deployment-scripts/xmladmin_deployment.yml
     - deployment-scripts/xmloutadmin_deployment.yml
+    - deployment-scripts/chdadmin_deployment.yml
 
 - name: Setup deployment playbook dependancies (1/2)
   vars:
